@@ -45,8 +45,8 @@ post '/save' do
   file << upload.read
 
   begin
-    yomu = Yomu.new(file.path)
-    metadata = yomu.metadata
+
+    metadata = Yomu.new(file.path).metadata
 
     # print out as a list
     @out = "<li>Tempfile: #{file.path} (deleted)</li>";
@@ -73,7 +73,6 @@ post '/save' do
   end
 
   # clean up
-  yomu = nil
   file.close
   file.unlink
 
