@@ -31,6 +31,7 @@ post '/save' do
     # print out as a list
     @out = "";
     metadata.each{|k,v| @out << "<li>#{h k}: #{h v}</li>" }
+
   rescue Errno::EPIPE => e
     @errors = "Broken pipe, try restarting the server?\n"
     @errors << "Details: #{e}\n"
