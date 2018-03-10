@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <title>Metadata</title>
+    </head>
+    <body>
+
+      <% if @metadata %>
+        <h1>Metadata</h1>
+        <p><%= @metadata %></p>
+      <% end %>
+
+      <% if @errors %>
+        <h1>Errors</h1>
+        <p><pre><%= @errors %></pre></p>
+      <% end %>
+      
+    </body>
+</html>

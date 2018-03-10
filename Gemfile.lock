@@ -1,0 +1,33 @@
+GIT
+  remote: https://github.com/intrigueio/yomu.git
+  revision: ed88dcc0da3c30fc9ae635bada8c4c9b7cd976f1
+  specs:
+    yomu (0.2.4)
+      json
+      mime-types (~> 1.23)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    json (2.1.0)
+    mime-types (1.25.1)
+    mustermann (1.0.2)
+    rack (2.0.4)
+    rack-protection (2.0.1)
+      rack
+    sinatra (2.0.1)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.1)
+      tilt (~> 2.0)
+    tilt (2.0.8)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  sinatra!
+  yomu!
+
+BUNDLED WITH
+   1.16.1
