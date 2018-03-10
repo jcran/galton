@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'tempfile'
 require 'yomu'
+require 'puma'
 
 helpers do
   def h(text)
@@ -14,18 +15,16 @@ end
 
 post '/save' do
 
-  @filename = Tempfile.new('foo').path
-  file = params[:file][:tempfile]
-
-  File.open("#{@filename}", 'wb') do |f|
-    f.write(file.read)
-  end
+  upload = params[:file][:tempfile]
+  @file = Tempfile.new('galton')
+  @file.binmode
+  @file << upload.read
 
   begin
-    metadata = Yomu.new(@filename).metadata
+    metadata = Yomu.new(@file.path).metadata
 
     # print out as a list
-    @out = "";
+    @out = "<li>Tempfile: #{@file.path} (deleted)</li>";
     metadata.each do |k,v|
       next if k =~ /X-Parsed-By/
       @out << "<li>#{h k}: #{h v}</li>"
@@ -46,6 +45,9 @@ post '/save' do
     @errors << "Details: #{e}\n"
     @errors << "Java version: #{java_version}"
   end
+
+  @file.close
+  @file.unlink
 
   erb :'show'
 end
