@@ -26,7 +26,11 @@ post '/save' do
   java_version = `java --version`
 
   begin
-    @metadata = Yomu.new(@filename).metadata
+    metadata = Yomu.new(@filename).metadata
+
+    # print out as a list
+    @out = "";
+    metadata.each{|k,v| @out << "<li>#{h k}: #{h v}</li>" }
   rescue Errno::EPIPE => e
     @errors = "Broken pipe, try restarting the server?\n"
     @errors << "Details: #{e}\n"
