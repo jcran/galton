@@ -59,7 +59,7 @@ post '/save' do
     # Grab the java version in case we need to display it
     java_version = `java -version 2>&1`
 
-    @errors = "Broken pipe, try restarting the server?\n"
+    @errors = "Unable to contact Java\n"
     @errors << "Details: #{e}\n"
     @errors << "Java version: #{java_version}"
   rescue JSON::ParserError => e
