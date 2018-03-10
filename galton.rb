@@ -9,11 +9,21 @@ helpers do
   end
 end
 
+
+#redirect all traffic to https over ssl with Sinatra
+configure :production do
+  require 'rack-ssl-enforcer'
+  use Rack::SslEnforcer
+end
+
+
 get "/" do
   erb :'form'
 end
 
 post '/save' do
+  redirect "/" unless params[:file]
+  redirect "/" unless params[:file][:tempfile]
 
   upload = params[:file][:tempfile]
   @file = Tempfile.new('galton')
@@ -44,6 +54,7 @@ post '/save' do
     @errors = "Error: invalid metadata\n"
     @errors << "Details: #{e}\n"
     @errors << "Java version: #{java_version}"
+
   end
 
   @file.close
