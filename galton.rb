@@ -49,7 +49,7 @@ post '/save' do
     Thread.new do
       @file.binmode
       @file << upload.read
-      @metadata = Yomu.new(file.path).metadata
+      @metadata = Yomu.new(@file.path).metadata
     end
 
     # print out as a list
