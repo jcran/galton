@@ -9,9 +9,9 @@
         <p>For your protection, files are deleted immediately after parsing. If you do not wish to upload your files, you may run <a href="https://github.com/jcran/galton">this service</a> locally.</p>
         <p>
         <form action="/save" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file"><br/><br/>
+            <input type="file" name="file"/><br/><br/>
             <%= "#{recaptcha_tags if settings.environment == :production}" %>
-            <input type="submit" value="Upload">
+            <input type="submit"/>
         </form>
         </p>
         <p>Metadata parsing powered by: <a href="https://tika.apache.org/1.17/formats.html">Apache Tika</a><p>
