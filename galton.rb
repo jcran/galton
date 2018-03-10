@@ -77,8 +77,8 @@ post '/save' do
   end
 
   # clean up
-  file.close
-  file.unlink
+  @file.close
+  @file.unlink
 
   erb :'show'
 end
