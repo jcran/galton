@@ -21,22 +21,26 @@ post '/save' do
     f.write(file.read)
   end
 
-
-  # Grab the java version in case we need to display it
-  java_version = `java --version`
-
   begin
     metadata = Yomu.new(@filename).metadata
 
     # print out as a list
     @out = "";
-    metadata.each{|k,v| @out << "<li>#{h k}: #{h v}</li>" }
+    metadata.each do |k,v|
+      next if k =~ /X-Parsed-By/
+      @out << "<li>#{h k}: #{h v}</li>"
+    end
 
   rescue Errno::EPIPE => e
+    # Grab the java version in case we need to display it
+    java_version = `java -version`
+
     @errors = "Broken pipe, try restarting the server?\n"
     @errors << "Details: #{e}\n"
     @errors << "Java version: #{java_version}"
   rescue JSON::ParserError => e
+    # Grab the java version in case we need to display it
+    java_version = `java -version`
 
     @errors = "Error: invalid metadata\n"
     @errors << "Details: #{e}\n"
