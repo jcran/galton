@@ -16,6 +16,7 @@ GEM
     rack (2.0.4)
     rack-protection (2.0.1)
       rack
+    rack-ssl-enforcer (0.2.9)
     sinatra (2.0.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -28,8 +29,12 @@ PLATFORMS
 
 DEPENDENCIES
   puma!
+  rack-ssl-enforcer!
   sinatra!
   yomu!
+
+RUBY VERSION
+   ruby 2.4.0p0
 
 BUNDLED WITH
    1.16.1
