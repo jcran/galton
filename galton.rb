@@ -40,17 +40,21 @@ post '/save' do
 
   # otherwise proceed
   upload = params[:file][:tempfile]
-  file = Tempfile.new('galton')
-  file.binmode
-  file << upload.read
+
 
   begin
 
-    metadata = Yomu.new(file.path).metadata
+    @metadata = {}
+    Thread.new do
+      file = Tempfile.new('galton')
+      file.binmode
+      file << upload.read
+      @metadata = Yomu.new(file.path).metadata
+    end
 
     # print out as a list
     @out = "<li>Tempfile: #{file.path} (deleted)</li>";
-    metadata.each do |k,v|
+    @metadata.each do |k,v|
       next if k =~ /X-Parsed-By/
       @out << "<li>#{h k}: #{h v}</li>"
     end
