@@ -25,6 +25,25 @@ configure :production do
   end
 end
 
+$pid = 9999999
+Thread.new do
+  $pid = Yomu.server(:metadata, 9999)
+end
+
+# Trap ^C
+Signal.trap("INT") {
+  puts "Caught ^c, killing yomu"
+  Yomu.kill_server!
+  exit
+}
+
+# Trap `Kill `
+Signal.trap("TERM") {
+  puts "Caught kill, killing yomu"
+  Yomu.kill_server!
+  exit
+}
+
 
 get "/" do
   erb :'form'
@@ -41,20 +60,16 @@ post '/save' do
   # otherwise proceed
   upload = params[:file][:tempfile]
 
-
   begin
 
-    @metadata = {}
-    @file = Tempfile.new('galton')
-    Thread.new do
-      @file.binmode
-      @file << upload.read
-      @metadata = Yomu.new(@file.path).metadata
-    end
+    file = Tempfile.new('galton')
+    file.binmode
+    file << upload.read
+    metadata = Yomu.new(file.path).metadata
 
     # print out as a list
-    @out = "<li>Tempfile: #{@file.path} (deleted)</li>";
-    @metadata.each do |k,v|
+    @out = "<li>Tempfile: #{file.path} (deleted)</li>";
+    metadata.each do |k,v|
       next if k =~ /X-Parsed-By/
       @out << "<li>#{h k}: #{h v}</li>"
     end
@@ -77,8 +92,8 @@ post '/save' do
   end
 
   # clean up
-  @file.close
-  @file.unlink
+  file.close
+  file.unlink
 
   erb :'show'
 end
