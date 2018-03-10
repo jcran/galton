@@ -5,5 +5,5 @@ Galton is used to power the https://metadata.exposed site. If you do not want to
 Local installation:
  - Install Ruby
  - Install a Java JDK
- - Install bundler gem & run 'bundle install' in the directory
+ - Install bundler gem & run 'bundle install' in the app's directory
  - Run the application 'bundle exec ruby ./galton.rb'
