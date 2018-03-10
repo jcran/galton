@@ -4,12 +4,15 @@
     </head>
     <body>
         <h1>Metadata Exposed!</h1>
+        <p>This service is provided for free for digital investigators. Files are deleted immediately after parsing. If you do not wish to upload your files, you may run <a href="https://github.com/jcran/galton">Galton</a> locally. </p>
 
+        <p>
         <form action="/save" method="POST" enctype="multipart/form-data">
             <input type="file" name="file"><br/><br/>
             <input type="submit" value="Upload">
         </form>
+        </p>
 
-        Powered by: <a href="https://github.com/intrigueio/galton">Galton</a>
+        <p>Metadata parsing powered by: <a href="https://tika.apache.org/1.17/formats.html">Apache Tika</a><p>
     </body>
 </html>
