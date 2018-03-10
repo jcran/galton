@@ -17,6 +17,8 @@ GEM
     rack-protection (2.0.1)
       rack
     rack-ssl-enforcer (0.2.9)
+    recaptcha (4.6.6)
+      json
     sinatra (2.0.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -30,6 +32,7 @@ PLATFORMS
 DEPENDENCIES
   puma!
   rack-ssl-enforcer!
+  recaptcha!
   sinatra!
   yomu!
 

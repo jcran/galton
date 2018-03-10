@@ -1,3 +1,4 @@
+require 'recaptcha'
 require 'sinatra'
 require 'tempfile'
 require 'yomu'
@@ -12,8 +13,16 @@ end
 
 #redirect all traffic to https over ssl with Sinatra
 configure :production do
-  require 'rack-ssl-enforcer'
-  use Rack::SslEnforcer
+#  require 'rack-ssl-enforcer'
+#  use Rack::SslEnforcer
+  include Recaptcha::ClientHelper
+  include Recaptcha::Verify
+
+  # these will only work on localhost ... make your own at https://www.google.com/recaptcha
+  Recaptcha.configure do |config|
+    config.site_key  = ENV["RECAPTCHA_SITE_KEY"] || '6Le7oRETAAAAAETt105rjswZ15EuVJiF7BxPROkY' # (local key)
+    config.secret_key = ENV["RECAPTCHA_SECRET_KEY"] || '6Le7oRETAAAAAL5a8yOmEdmDi3b2pH7mq5iH1bYK' # (local key)
+  end
 end
 
 
@@ -22,9 +31,14 @@ get "/" do
 end
 
 post '/save' do
+  # make sure our input is sane
   redirect "/" unless params[:file]
   redirect "/" unless params[:file][:tempfile]
 
+  # check our captcha before doing anything in production
+  redirect "/" if (settings.environment == :production && !verify_recaptcha)
+
+  # otherwise proceed
   upload = params[:file][:tempfile]
   @file = Tempfile.new('galton')
   @file.binmode

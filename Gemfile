@@ -5,4 +5,5 @@ source 'https://rubygems.org' do
   gem 'puma'
   gem 'sinatra'
   gem 'rack-ssl-enforcer'
+  gem 'recaptcha'
 end
