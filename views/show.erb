@@ -6,13 +6,14 @@
 
       <% if @metadata %>
         <h1>Metadata</h1>
-        <p><%= @metadata %></p>
+        <ul><%= out = "" @metadata.map {|k,v| out << "<li>#{h k}: #{h v}</li>" } %></ul>
+        </p>
       <% end %>
 
       <% if @errors %>
         <h1>Errors</h1>
         <p><pre><%= @errors %></pre></p>
       <% end %>
-      
+
     </body>
 </html>

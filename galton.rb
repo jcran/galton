@@ -2,6 +2,12 @@ require 'sinatra'
 require 'tempfile'
 require 'yomu'
 
+helpers do
+  def h(text)
+    Rack::Utils.escape_html(text)
+  end
+end
+
 get "/" do
   erb :'form'
 end
