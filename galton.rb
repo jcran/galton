@@ -27,7 +27,7 @@ end
 
 $pid = 9999999
 Thread.new do
-  $pid = Yomu.server(:metadata, 9999)
+  $pid = Yomu.server(:metadata)
 end
 
 # Trap ^C
@@ -73,6 +73,16 @@ post '/save' do
       next if k =~ /X-Parsed-By/
       @out << "<li>#{h k}: #{h v}</li>"
     end
+
+  rescue Errno::ECONNRESET => e
+
+    # Grab the java version in case we need to display it
+    java_version = `java -version 2>&1`
+
+    @errors = "Unable to contact Java\n"
+    @errors << "Details: #{e}\n"
+    @errors << "Java version: #{java_version}"
+    @errors << "Netstat: #{netstat -lnt}"
 
   rescue Errno::EPIPE => e
     # Grab the java version in case we need to display it
