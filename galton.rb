@@ -10,7 +10,6 @@ helpers do
   end
 end
 
-
 #redirect all traffic to https over ssl with Sinatra
 configure :production do
 #  require 'rack-ssl-enforcer'
@@ -28,17 +27,14 @@ end
 # Grab the java version in case we need to display it
 $java_version=`java -version 2>&1`
 
-
 # run the server in the background
-$pid = 9999999
-Thread.new do
-  $pid = Yomu.server(:metadata)
-end
+$pid = Yomu.server(:metadata)
 
 # Trap ^C
 Signal.trap("INT") {
   puts "Caught ^c, killing yomu"
   Yomu.kill_server!
+  `kill -9 #{$pid}`
   exit
 }
 
@@ -46,6 +42,7 @@ Signal.trap("INT") {
 Signal.trap("TERM") {
   puts "Caught kill, killing yomu"
   Yomu.kill_server!
+  `kill -9 #{$pid}`
   exit
 }
 
@@ -111,10 +108,7 @@ post '/metadata' do
   rescue JSON::ParserError => e
     @errors = "Error: invalid metadata\n"
     @errors << "Details: #{e}\n"
-    @errors << "Java version: #{$java_version}"
   end
-
-
 
   erb :'metadata'
 end
