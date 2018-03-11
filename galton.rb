@@ -25,6 +25,11 @@ configure :production do
   end
 end
 
+# Grab the java version in case we need to display it
+$java_version=`java -version 2>&1`
+
+
+# run the server in the background
 $pid = 9999999
 Thread.new do
   $pid = Yomu.server(:metadata)
@@ -44,66 +49,72 @@ Signal.trap("TERM") {
   exit
 }
 
+set :public_folder, "public"
 
 get "/" do
   erb :'form'
 end
 
-post '/save' do
+post '/metadata' do
+
+  # specify input
+  if params[:file] && params[:file][:tempfile]
+    user_input = :file
+  elsif params[:uri]
+    user_input = :uri
+  else
+    user_input = nil
+  end
+
   # make sure our input is sane
-  redirect "/" unless params[:file]
-  redirect "/" unless params[:file][:tempfile]
+  redirect "/" unless user_input
 
   # check our captcha before doing anything in production
   redirect "/" if (settings.environment == :production && !verify_recaptcha)
 
-  # otherwise proceed
-  upload = params[:file][:tempfile]
 
   begin
 
-    file = Tempfile.new('galton')
-    file.binmode
-    file << upload.read
-    metadata = Yomu.new(file.path).metadata
+    if user_input == :file
+
+      # read the file and parse
+      upload = params[:file][:tempfile]
+      file = Tempfile.new('galton')
+      file.binmode
+      file << upload.read
+      metadata = Yomu.new(file.path).metadata
+
+      # Clean up
+      file.close
+      file.unlink
+
+    elsif user_input == :uri
+      # Yomu is smart enough to download the file
+      metadata = Yomu.new(params[:uri]).metadata
+    end
 
     # print out as a list
-    @out = "<li>Tempfile: #{file.path} (deleted)</li>";
+    @out = "";
     metadata.each do |k,v|
       next if k =~ /X-Parsed-By/
       @out << "<li>#{h k}: #{h v}</li>"
     end
 
   rescue Errno::ECONNRESET => e
-
-    # Grab the java version in case we need to display it
-    java_version = `java -version 2>&1`
-
     @errors = "Unable to contact Java\n"
     @errors << "Details: #{e}\n"
     @errors << "Java version: #{java_version}"
-    @errors << "Netstat: #{netstat -lnt}"
-
   rescue Errno::EPIPE => e
-    # Grab the java version in case we need to display it
-    java_version = `java -version 2>&1`
-
     @errors = "Unable to contact Java\n"
     @errors << "Details: #{e}\n"
     @errors << "Java version: #{java_version}"
   rescue JSON::ParserError => e
-    # Grab the java version in case we need to display it
-    java_version = `java -version 2>&1`
-
     @errors = "Error: invalid metadata\n"
     @errors << "Details: #{e}\n"
     @errors << "Java version: #{java_version}"
-
   end
 
-  # clean up
-  file.close
-  file.unlink
 
-  erb :'show'
+
+  erb :'metadata'
 end

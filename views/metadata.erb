@@ -1,0 +1,9 @@
+<% if @errors %>
+  <h1>Errors</h1>
+  <p><pre><%= @errors %></pre></p>
+<% else %>
+  <h1>Metadata</h1>
+  <p> <ul><%= @out %></ul>  </p>
+<% end %>
+
+<a href="/">Back</a>

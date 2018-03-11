@@ -1,30 +1,11 @@
-<html>
-    <head>
-        <title>Metadata.Exposed</title>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-          integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
-          crossorigin="anonymous"></script>
-        <script src='https://www.google.com/recaptcha/api.js'></script>
-        <script>
-        $('#file_form').keydown(function() {
-          var key = e.which;
-          if (key == 13) {
-            // As ASCII code for ENTER key is "13"
-            $('#file_form').submit(); // Submit form code
-            }
-          });
-        </script>
-    </head>
-    <body>
-        <h1>Metadata Exposed!</h1>
-        <p>This service is provided for free for digital investigators.</p>
-        <p>For your protection, files are deleted immediately after parsing. If you do not wish to upload your files, you can run <a href="https://github.com/jcran/galton">the service</a> locally.</p>
-        <p>
-        <form id="file_form" action="/save" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file"/><br/><br/>
-            <%= "#{recaptcha_tags if settings.environment == :production}" %>
-            <input type="submit"/>
-        </form>
-        </p>
-    </body>
-</html>
+<h1>Metadata Exposed!</h1>
+<p>This service is provided for free for digital investigators. It will parse and display metadata from many common file types.</p>
+<p>For your protection, files are deleted immediately after parsing. If you do not wish to upload your files, you can run <a href="https://github.com/jcran/galton">the service</a> locally.</p>
+<p>
+  <form id="file_form" action="/metadata" method="POST" enctype="multipart/form-data">
+      <!--<input type="text" name="uri"><br>-->
+      <input type="file" name="file"/><br><br>
+      <%= "#{recaptcha_tags if settings.environment == :production}" %><br>
+      <input type="submit"/>
+  </form>
+</p>
