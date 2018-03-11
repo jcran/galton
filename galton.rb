@@ -103,15 +103,15 @@ post '/metadata' do
   rescue Errno::ECONNRESET => e
     @errors = "Unable to contact Java\n"
     @errors << "Details: #{e}\n"
-    @errors << "Java version: #{java_version}"
+    @errors << "Java version: #{$java_version}"
   rescue Errno::EPIPE => e
     @errors = "Unable to contact Java\n"
     @errors << "Details: #{e}\n"
-    @errors << "Java version: #{java_version}"
+    @errors << "Java version: #{$java_version}"
   rescue JSON::ParserError => e
     @errors = "Error: invalid metadata\n"
     @errors << "Details: #{e}\n"
-    @errors << "Java version: #{java_version}"
+    @errors << "Java version: #{$java_version}"
   end
 
 
