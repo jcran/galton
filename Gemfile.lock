@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/intrigueio/yomu.git
-  revision: ed88dcc0da3c30fc9ae635bada8c4c9b7cd976f1
+  revision: a1eb2f115cb8cca76b2317396c5f4076287e03fb
   specs:
-    yomu (0.2.4)
+    yomu (0.2.5.pentestify)
       json
       mime-types (~> 1.23)
 
